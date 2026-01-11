@@ -50,19 +50,19 @@ User → Frontend UI → Django Views → AI Service
 
 ### System Architecture Diagram
 
-<img src="images/system_architecture.png" width="800" />
+<img src="images/component_architecture.png" width="800" />
 
 ### Component-Wise Architecture
+<img src="images/security_workflow.png" width="800" />
 
-<img src="images/component_architecture.png" width="800" />
 
 ### UML-Style High-Level Flow
 
 <img src="images/uml_flow.png" width="800" />
 
 ### Security Evaluation Workflow
+<img src="images/system_architecture.png" width="800" />
 
-<img src="images/security_workflow.png" width="800" />
 
 ---
 
@@ -173,13 +173,6 @@ Using Django Admin:
 - Audit AI behavior  
 
 ---
-
-## 🎓 Interview-Ready Explanation  
-
-> *“This project simulates real-world adversarial testing of AI systems by evaluating how models respond to prompt injection and social engineering attempts. It logs all interactions, assigns security scores, and visualizes compliance behavior using a professional dashboard.”*
-
----
-
 ## 🚀 How to Run the Project  
 
 1. Install dependencies  
