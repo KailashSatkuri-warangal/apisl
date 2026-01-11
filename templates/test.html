@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Security Lab</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card">
+
+            <!-- Dark / Light Toggle -->
+            <div class="toggle">
+                <button type="button" onclick="toggleMode()">Dark / Light</button>
+            </div>
+
+            <h2>AI Prompt Injection Lab</h2>
+
+            <!-- Form -->
+            <form method="POST" onsubmit="showLoader()">
+                {% csrf_token %}
+                <div class="section">
+                    <label>Attack Type</label>
+                    <select name="attack_type" required>
+                        <option>Instruction Override</option>
+                        <option>Authority Impersonation</option>
+                        <option>Social Engineering</option>
+                    </select>
+                </div>
+                <div class="section">
+                    <label>Prompt</label>
+                    <textarea name="prompt" required></textarea>
+                </div>
+                <button type="submit">Run Test</button>
+            </form>
+
+            <!-- 3D Loader -->
+            <div id="loader" class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <!-- Result Box -->
+            {% if result %}
+            <div class="result-box">
+                <strong>AI Response:</strong><br>
+                {{ result }}<br><br>
+
+                <strong>Status:</strong>
+                {% if is_secure %}
+                <span class="secure">Secure (100/100)</span>
+                {% else %}
+                <span class="insecure">Insecure (0/100)</span>
+                {% endif %}
+            </div>
+
+            <button type="button" onclick="exportPDF()">Export PDF</button>
+            {% endif %}
+
+            <!-- Chart -->
+            <canvas id="scoreChart" height="120"></canvas>
+
+            <script>
+                const ctx = document.getElementById('scoreChart');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Security Score'],
+                        datasets: [{
+                            label: 'Score',
+                            data: [{% if is_secure %}100{% else %}0{% endif %}],
+                    backgroundColor: ['#22c55e']
+                        }]
+                    },
+                    options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+                });
+            </script>
+
+            <!-- Attack History Table -->
+            <h3>Attack History</h3>
+
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Score</th>
+                </tr>
+
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.attack_type }}</td>
+                    <td>{{ log.is_secure|yesno:"Secure,Insecure" }}</td>
+                    <td>{{ log.is_secure|yesno:"100,0" }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
